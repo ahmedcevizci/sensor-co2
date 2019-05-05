@@ -1,0 +1,22 @@
+server:
+  port: 8082
+domain-name: localhost:8082
+spring:
+  application:
+    name: co2-sensor-api
+  datasource:
+    username: alaz
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/co2_sensor_api_db
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  profiles:
+    active: test
+sensor:
+  co2:
+    alerting-co2-levels: 2000
+flyway:
+  out-of-order: true
+  baseline-on-migrate: true
