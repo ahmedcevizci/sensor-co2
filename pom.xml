@@ -216,8 +216,8 @@
                             <targetTests>
                                 <param>info.alaz.sensor.co2.service.impl.*</param>
                             </targetTests>
-                            <mutationThreshold>0</mutationThreshold>
-                            <coverageThreshold>0</coverageThreshold>
+                            <mutationThreshold>80</mutationThreshold>
+                            <coverageThreshold>80</coverageThreshold>
                         </configuration>
                     </execution>
                 </executions>

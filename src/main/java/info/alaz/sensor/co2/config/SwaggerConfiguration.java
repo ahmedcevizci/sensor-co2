@@ -16,6 +16,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class SwaggerConfiguration {
                 .tags(new Tag(APITags.CO2_SENSOR_API_TAG, APITags.CO2_SENSOR_API_DESCRIPTION, APITags.CO2_SENSOR_API_ORDER))
                 .host(domainName)
                 .select()
-                .apis(p -> { //Only selects calls which have V1 as accept headers
+                .apis(p -> {
                     if (p != null && p.produces() != null) {
                         for (MediaType mt : p.produces()) {
                             if (mt.toString().equals(CO2_SENSOR_API_V1_RESPONSE_MEDIA_TYPE)) {
@@ -66,7 +67,7 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "CO2 SensorEntity API",
+                "CO2 Sensor API",
                 "This is an API to monitor CO2 levels coming from sensors.",
                 "1.0",
                 null,
@@ -78,10 +79,10 @@ public class SwaggerConfiguration {
     }
 
     private List<ResponseMessage> responseMessages() {
-        return Collections.singletonList(new ResponseMessageBuilder()
-                .code(401)
-                .message("You are not authorized to access this resource. Access denied.")
-                .build());
+        List<ResponseMessage> messages = new ArrayList<>();
+        messages.add(new ResponseMessageBuilder().code(406).message("Not Acceptable. Wrong Accept MediaType").build());
+        messages.add(new ResponseMessageBuilder().code(416).message("Unsupported Media Type. Wrong ContentType").build());
+        return messages;
     }
 
 }

@@ -37,7 +37,10 @@ public class Co2SensorController extends ParentCo2SensorController {
 
     @ApiOperation(value = "Create sensor measurement", tags = APITags.CO2_SENSOR_API_TAG)
     @ApiResponses(value = {
-            @ApiResponse(code = 400, message = APIErrorMessages.REQUEST_BODY_EMPTY)
+            @ApiResponse(code = 400, message = APIErrorMessages.CO2_LEVEL_CANNOT_BE_NEGATIVE),
+            @ApiResponse(code = 400, message = APIErrorMessages.INVALID_CO2_LEVEL),
+            @ApiResponse(code = 400, message = APIErrorMessages.MEASUREMENT_CANNOT_BE_IN_FUTURE),
+            @ApiResponse(code = 404, message = APIErrorMessages.SENSOR_NOT_FOUND)
     })
     @ResponseStatus(CREATED)
     @PostMapping(path = "/{" + SENSOR_UUID + "}/measurements")
@@ -54,7 +57,7 @@ public class Co2SensorController extends ParentCo2SensorController {
 
     @ApiOperation(value = "Get sensor status", tags = APITags.CO2_SENSOR_API_TAG)
     @ApiResponses(value = {
-            @ApiResponse(code = 400, message = APIErrorMessages.REQUEST_BODY_EMPTY)
+            @ApiResponse(code = 404, message = APIErrorMessages.SENSOR_NOT_FOUND)
     })
     @ResponseStatus(OK)
     @GetMapping(path = "/{" + SENSOR_UUID + "}")
@@ -71,9 +74,9 @@ public class Co2SensorController extends ParentCo2SensorController {
 
     @ApiOperation(value = "Fetch Sensor Metrics", tags = APITags.CO2_SENSOR_API_TAG)
     @ApiResponses(value = {
-            @ApiResponse(code = 400, message = APIErrorMessages.REQUEST_BODY_EMPTY)
+            @ApiResponse(code = 404, message = APIErrorMessages.SENSOR_NOT_FOUND)
     })
-    @ResponseStatus(CREATED)
+    @ResponseStatus(OK)
     @GetMapping(path = "/{" + SENSOR_UUID + "}/metrics")
     public MetricsResponseDto getSensorMetrics(@PathVariable(name = SENSOR_UUID) UUID sensorUuid) throws Exception {
 
@@ -88,9 +91,9 @@ public class Co2SensorController extends ParentCo2SensorController {
 
     @ApiOperation(value = "List Alerts", tags = APITags.CO2_SENSOR_API_TAG)
     @ApiResponses(value = {
-            @ApiResponse(code = 400, message = APIErrorMessages.REQUEST_BODY_EMPTY)
+            @ApiResponse(code = 404, message = APIErrorMessages.SENSOR_NOT_FOUND)
     })
-    @ResponseStatus(CREATED)
+    @ResponseStatus(OK)
     @GetMapping(path = "/{" + SENSOR_UUID + "}/alerts")
     public List<AlertResponseDto> listAlerts(@PathVariable(name = SENSOR_UUID) UUID sensorUuid) throws Exception {
 

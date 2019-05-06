@@ -2,6 +2,9 @@ package info.alaz.sensor.co2.web.rest.errorhandling;
 
 
 import info.alaz.sensor.co2.constant.APIErrorHeaders;
+import info.alaz.sensor.co2.exception.Co2LevelCannotBeNegativeException;
+import info.alaz.sensor.co2.exception.InvalidCo2MeasurementException;
+import info.alaz.sensor.co2.exception.MeasurementTimeCannotBeInFutureException;
 import info.alaz.sensor.co2.exception.SensorNotFoundException;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
@@ -30,41 +33,38 @@ public class Co2SensorAPIExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleNotFoundRequest(final SensorNotFoundException ex) {
         logger.warn("CO2 SensorEntity Api Exception", ex.getMessage(), this.getClass().getName());
-        HttpHeaders headers = createFailureAlert("Entity", APIErrorHeaders.REQUEST_BODY_EMPTY);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-CO2SensorAPI-error", "error." + APIErrorHeaders.SENSOR_NOT_FOUND);
         return createResponse(HttpStatus.NOT_FOUND, headers, ex.getMessage());
     }
 
-
-    // TODO Advice other exceptions as well
-
-    private static HttpHeaders createAlert(String message, String param) {
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleBadRequest(final Co2LevelCannotBeNegativeException ex) {
+        logger.warn("CO2 SensorEntity Api Exception", ex.getMessage(), this.getClass().getName());
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-CO2SensorAPI-alert", message);
-        headers.add("X-CO2SensorAPI-params", param);
-        return headers;
+        headers.add("X-CO2SensorAPI-error", "error." + APIErrorHeaders.CO2_LEVEL_CANNOT_BE_NEGATIVE);
+        return createResponse(HttpStatus.BAD_REQUEST, headers, ex.getMessage());
     }
 
-    public static HttpHeaders createEntityGetAlert(String entityName, String param) {
-        return createAlert("CO2SensorAPI." + entityName + ".get", param);
-    }
-
-    public static HttpHeaders createEntityCreationAlert(String entityName, String param) {
-        return createAlert("CO2SensorAPI." + entityName + ".created", param);
-    }
-
-    public static HttpHeaders createEntityUpdateAlert(String entityName, String param) {
-        return createAlert("CO2SensorAPI." + entityName + ".updated", param);
-    }
-
-    public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
-        return createAlert("CO2SensorAPI." + entityName + ".deleted", param);
-    }
-
-    public static HttpHeaders createFailureAlert(String entityName, String errorKey) {
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleBadRequest(final InvalidCo2MeasurementException ex) {
+        logger.warn("CO2 SensorEntity Api Exception", ex.getMessage(), this.getClass().getName());
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-CO2SensorAPI-error", "error." + errorKey);
-        headers.add("X-CO2SensorAPI-params", entityName);
-        return headers;
+        headers.add("X-CO2SensorAPI-error", "error." + APIErrorHeaders.INVALID_CO2_LEVEL);
+        return createResponse(HttpStatus.BAD_REQUEST, headers, ex.getMessage());
     }
 
+    @ExceptionHandler
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleBadRequest(final MeasurementTimeCannotBeInFutureException ex) {
+        logger.warn("CO2 SensorEntity Api Exception", ex.getMessage(), this.getClass().getName());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-CO2SensorAPI-error", "error." + APIErrorHeaders.MEASUREMENT_CANNOT_BE_IN_FUTURE);
+        return createResponse(HttpStatus.BAD_REQUEST, headers, ex.getMessage());
+    }
 }

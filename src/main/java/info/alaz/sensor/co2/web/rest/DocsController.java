@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import static info.alaz.sensor.co2.web.rest.ParentCo2SensorController.BASE_API_PATH;
+
 @RestController
-@RequestMapping(value = "/api/v1/sensors")
+@RequestMapping(value = BASE_API_PATH)
 @Api(hidden = true)
 public class DocsController {
 

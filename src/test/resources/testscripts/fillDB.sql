@@ -1,2 +1,51 @@
+-- SENSORS
 INSERT INTO tbl_sensor (fld_uuid, fld_status, fld_date_status_changed, fld_date_created)
-values ('0ed88e2d-e7ed-4840-a42a-c1641d3936e0', 'OK', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+values
+('0ed88e2d-e7ed-4840-a42a-c1641d3936e0', 'OK', CURRENT_TIMESTAMP, '2019-04-17 21:05:15.000000+02'),
+('a981fc48-332b-46d8-8b22-c5eb8e02cc43', 'OK', CURRENT_TIMESTAMP, '2019-04-19 21:05:15.000000+02'),
+('3f01795c-2b80-4e90-8065-0767a11588ed', 'WARN', CURRENT_TIMESTAMP, '2019-04-21 21:05:15.000000+02'),
+('920dddec-0900-4f8d-b4f1-a05ddeaa4159', 'ALERT', CURRENT_TIMESTAMP, '2019-04-20 21:05:15.000000+02');
+
+--  MEASUREMENTS ON OK SENSOR
+INSERT INTO tbl_measurement (fld_uuid, fld_sensor_id, fld_co2_level, fld_date_measured)
+values
+('a081fc48-332b-46d8-8b22-15eb8e02cc00', 'a981fc48-332b-46d8-8b22-c5eb8e02cc43', 1700, '2019-04-21 15:05:15.000000+02'),
+('b081fc48-332b-46d8-8b22-25eb8e02cc00', 'a981fc48-332b-46d8-8b22-c5eb8e02cc43', 1800, '2019-04-21 16:05:15.000000+02'),
+('c081fc48-332b-46d8-8b22-35eb8e02cc00', 'a981fc48-332b-46d8-8b22-c5eb8e02cc43', 1900, '2019-04-21 17:05:15.000000+02'),
+('d081fc48-332b-46d8-8b22-45eb8e02cc00', 'a981fc48-332b-46d8-8b22-c5eb8e02cc43', 1800, '2019-04-21 18:05:15.000000+02'),
+('e081fc48-332b-46d8-8b22-55eb8e02cc00', 'a981fc48-332b-46d8-8b22-c5eb8e02cc43', 1700, '2019-04-21 19:05:15.000000+02');
+
+
+--  MEASUREMENTS ON WARNING SENSOR
+INSERT INTO tbl_measurement (fld_uuid, fld_sensor_id, fld_co2_level, fld_date_measured)
+values
+('15cb55ca-9bc2-44da-914c-f7fa5273102a', '3f01795c-2b80-4e90-8065-0767a11588ed', 1700, '2019-04-21 15:05:15.000000+02'),
+('25cb55ca-9bc2-44da-914c-f7fa5273102a', '3f01795c-2b80-4e90-8065-0767a11588ed', 1800, '2019-04-21 16:05:15.000000+02'),
+('35cb55ca-9bc2-44da-914c-f7fa5273102a', '3f01795c-2b80-4e90-8065-0767a11588ed', 1900, '2019-04-21 17:05:15.000000+02'),
+('45cb55ca-9bc2-44da-914c-f7fa5273102a', '3f01795c-2b80-4e90-8065-0767a11588ed', 2000, '2019-04-21 18:05:15.000000+02'),
+('55cb55ca-9bc2-44da-914c-f7fa5273102a', '3f01795c-2b80-4e90-8065-0767a11588ed', 2100, '2019-04-21 19:05:15.000000+02');
+
+--  MEASUREMENTS ON ALERTING SENSOR
+INSERT INTO tbl_measurement (fld_uuid, fld_sensor_id, fld_co2_level, fld_date_measured)
+values
+('0df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 1200, '2019-04-21 10:05:15.000000+02'),
+('1df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 1300, '2019-04-21 11:05:15.000000+02'),
+('2df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 1400, '2019-04-21 12:05:15.000000+02'),
+('3df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 1500, '2019-04-21 13:05:15.000000+02'),
+('4df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 1600, '2019-04-21 14:05:15.000000+02'),
+('5df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 1700, '2019-04-21 15:05:15.000000+02'),
+('6df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 1800, '2019-04-21 16:05:15.000000+02'),
+('7df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 1900, '2019-04-21 17:05:15.000000+02'),
+('8df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 2000, '2019-04-21 18:05:15.000000+02'),
+('9df0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 2100, '2019-04-21 19:05:15.000000+02'),
+('0ef0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 2200, '2019-04-21 20:05:15.000000+02'),
+('0ff0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 2300, '2019-04-21 21:05:15.000000+02'),
+('00f0c2fe-b323-4662-96f6-06b399473ac5', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 2400, '2019-04-21 22:05:15.000000+02');
+
+--ALERTS OF ALERTING SENSOR
+INSERT INTO tbl_alert (fld_uuid, fld_sensor_id, fld_first_co2_level, fld_second_co2_level, fld_third_co2_level, fld_date_started, fld_date_ended)
+values
+('723311b9-813a-45d3-b2a7-faefc18925ba', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 2100, 2200, 2300, '2019-04-21 19:05:15.000000+02', '2019-04-21 21:05:15.000000+02'),
+('fd3bab0f-b99f-4e4e-8151-26dfbeb9e1f1', '920dddec-0900-4f8d-b4f1-a05ddeaa4159', 2200, 2300, 2400, '2019-04-21 20:05:15.000000+02', '2019-04-21 22:05:15.000000+02');
+
+

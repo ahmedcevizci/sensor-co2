@@ -4,10 +4,10 @@ import info.alaz.sensor.co2.config.Co2SensorProperties;
 import info.alaz.sensor.co2.dto.AlertResponseDto;
 import info.alaz.sensor.co2.dto.MeasurementRequestDto;
 import info.alaz.sensor.co2.dto.MetricsResponseDto;
-import info.alaz.sensor.co2.entity.SensorStatus;
 import info.alaz.sensor.co2.entity.AlertEntity;
 import info.alaz.sensor.co2.entity.MeasurementEntity;
 import info.alaz.sensor.co2.entity.SensorEntity;
+import info.alaz.sensor.co2.entity.SensorStatus;
 import info.alaz.sensor.co2.exception.SensorNotFoundException;
 import info.alaz.sensor.co2.mapper.AlertMapper;
 import info.alaz.sensor.co2.mapper.MeasurementMapper;
@@ -19,8 +19,6 @@ import info.alaz.sensor.co2.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,13 +55,12 @@ public class Co2SensorServiceImpl implements Co2SensorService {
         logger.debug("Saving new measurement");
 
         SensorEntity sensorEntity = getSensorEntity(sensorUuid);
-        //TODO check mapping
         MeasurementEntity measurementEntity = this.measurementMapper.toEntity(null, measurementRequestDto, sensorEntity);
 
         if (measurementEntity.getCo2Level() > this.alertingCo2Levels) {
             handleAlertingMeasurement(sensorUuid, sensorEntity, measurementEntity);
         } else {
-            handleNormalMeasurement(sensorUuid, sensorEntity, measurementEntity);
+            handleNormalMeasurement(sensorUuid, sensorEntity);
         }
 
         this.measurementRepository.save(measurementEntity);
@@ -71,7 +68,7 @@ public class Co2SensorServiceImpl implements Co2SensorService {
         logger.debug("Saved new measurement");
     }
 
-    private void handleNormalMeasurement(UUID sensorUuid, SensorEntity sensorEntity, MeasurementEntity currentMeasurement) {
+    private void handleNormalMeasurement(UUID sensorUuid, SensorEntity sensorEntity) {
         SensorStatus previousSensorStatus = sensorEntity.getStatus();
         if (SensorStatus.OK.equals(previousSensorStatus)) {
             // do nothing
@@ -79,7 +76,7 @@ public class Co2SensorServiceImpl implements Co2SensorService {
         } else if (SensorStatus.WARN.equals(previousSensorStatus)) {
             this.updateSensorStatus(sensorEntity, SensorStatus.OK);
         } else if (SensorStatus.ALERT.equals(previousSensorStatus)) {
-            List<MeasurementEntity> lastMeasurements = this.measurementRepository.findAllBySensor_UuidOrderByDateMeasured(sensorUuid, new PageRequest(0, 2, Sort.Direction.DESC)).getContent();
+            List<MeasurementEntity> lastMeasurements = this.measurementRepository.findTop2BySensor_UuidOrderByDateMeasuredDesc(sensorUuid);
             this.handleInitialLastMeasurementsValidityInDb(previousSensorStatus, lastMeasurements);
             //Check if it is the third time normal values recorded.
             boolean isAllNormalMeasurements = this.isAllNormalMeasurements(lastMeasurements);
@@ -100,7 +97,7 @@ public class Co2SensorServiceImpl implements Co2SensorService {
             this.updateSensorStatus(sensorEntity, SensorStatus.WARN);
         } else {
 
-            List<MeasurementEntity> lastTwoMeasurements = this.measurementRepository.findAllBySensor_UuidOrderByDateMeasured(sensorUuid, new PageRequest(0, 2, Sort.Direction.DESC)).getContent();
+            List<MeasurementEntity> lastTwoMeasurements = this.measurementRepository.findTop2BySensor_UuidOrderByDateMeasuredDesc(sensorUuid);
             this.handleInitialLastMeasurementsValidityInDb(previousSensorStatus, lastTwoMeasurements);
 
             if (SensorStatus.WARN.equals(previousSensorStatus)) {
@@ -195,7 +192,6 @@ public class Co2SensorServiceImpl implements Co2SensorService {
 
         SensorEntity sensorEntity = getSensorEntity(sensorUuid);
         List<AlertEntity> alertEntityList = this.alertRepository.findAllBySensor_UuidOrderByDateEndedDesc(sensorUuid);
-        //TODO check mapping
         List<AlertResponseDto> alertResponseDtoList = alertMapper.toDtoList(alertEntityList);
 
         logger.debug("Fetched sensor alerts");
