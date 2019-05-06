@@ -117,12 +117,6 @@ mvn spring-boot:run
 ##### Generating API Documentation (Swagger)
 After running CO2 Sensor API, a swagger file is locally available at ```{{url}}/swagger-ui.html``` and should be fully usable as a rest client.
 
-Remotely you can access the swagger json on ```{{url}}/v2/api-docs?group=CO2-Sensor-API-V2```
-
-This is also the required documentation for this API.
-
-Logging is implemented in json format.
-
 
 
 
